@@ -1,0 +1,26 @@
+{% template text (:output-whitespace nil) (nodes) %}
+{% loop for node in nodes do %}
+  {% etypecase node %}
+    {% cmark:text-node %}{{ cmark:node-literal node }}{% end %}
+    {% cmark:link-node %}<a href="{{ cmark:node-url node }}">{{ text (cmark:node-children node) }}</a>{% end %}
+    {% cmark:code-node %}<code>{{ cmark:node-literal node }}</code>{% end %}
+  {% end %}
+{% end %}
+{% end %}
+
+{% template heading () (node) %}
+<h{{ cmark:node-heading-level node}}>{{ text (cmark:node-children node) }}</h{{ cmark:node-heading-level node}}>
+{% end %}
+
+{% template operator-page (:output-whitespace nil) (md) %}
+<link rel="stylesheet" href="/css/index.css"/>
+<article class="operator-page">
+{% loop for node in (cmark:node-children md) do %}
+  {% typecase node %}
+  {% cmark:heading-node %}{{ heading node }}{% end %}
+  {% cmark:paragraph-node %}{{ text (cmark:node-children node) }}{% end %}
+  {% cmark:code-block-node %}<pre>{{ cmark:node-literal node }}</pre>{% end %}
+  {% end %}
+{% end %}
+</article>
+{% end %}

@@ -1,0 +1,31 @@
+@import "https://unpkg.com/open-props";
+
+.operator-page {
+  --background: #141515;
+  --forground: #d6d7d9;
+}
+
+a {
+  color: #5592d9;
+  text-decoration-color: #508dd978;
+}
+
+article :is(textarea, pre, code, .primitives tr td:first-child) {
+    color: #969698;
+    background-color: #0c0d0e;
+}
+article :is(textarea, pre, .primitives tr td:first-child) {
+    margin-left: 2em;
+    margin-right: 2em;
+    padding: 2em 0em;
+}
+
+article {
+  background: var(--background);
+  color: var(--forground);
+  padding: 0em 2em;
+}
+
+body {
+  margin: 0px;
+}
