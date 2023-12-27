@@ -1,5 +1,5 @@
 {% template text (:output-whitespace nil) (nodes) %}
-{% loop for node in nodes do %}
+{% dolist (node nodes) %}
   {% etypecase node %}
     {% cmark:text-node %}{{ cmark:node-literal node }}{% end %}
     {% cmark:link-node %}<a href="{{ cmark:node-url node }}">{{ text (cmark:node-children node) }}</a>{% end %}
@@ -15,7 +15,7 @@
 {% template operator-page (:output-whitespace nil) (md) %}
 <link rel="stylesheet" href="/css/index.css"/>
 <article class="operator-page">
-{% loop for node in (cmark:node-children md) do %}
+{% dolist (node (cmark:node-children md)) %}
   {% typecase node %}
   {% cmark:heading-node %}{{ heading node }}{% end %}
   {% cmark:paragraph-node %}{{ text (cmark:node-children node) }}{% end %}
@@ -23,4 +23,52 @@
   {% end %}
 {% end %}
 </article>
+{% end %}
+
+{% template bqn-card (:output-whitespace nil) (nodes) %}
+{% destructuring-bind (logo names) nodes %}
+  <a class="bqn-card" href="{{ cmark:node-url (car (cmark:node-children logo)) }}">
+    <code class="symb">{{ cmark:node-literal (car (cmark:node-children (car (cmark:node-children logo)))) }}</code>
+    <div class="names">
+    {% dolist (name (cmark:node-children names)) %}
+      {% destructuring-bind (name type)
+           (str:split " " (cmark:node-literal (car (cmark:node-children (car (cmark:node-children name))))) :omit-nulls t) %}
+      <span>{{ name }}</span>
+      {% end %}
+    {% end %}
+    </div>
+  </a>
+{% end %}
+{% end %}
+
+{% template card-group (:output-whitespace nil) (heading nodes) %}
+<section class="card-group">
+  {{ heading heading }}
+  <div class="wrapper">
+  {% dolist (node nodes) %}
+      {{ bqn-card (cmark:node-children node) }}
+  {% end %}
+  </div>
+</div>
+{% end %}
+
+{% template main-page (:output-whitespace nil) (md) %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/index.css"/>
+  </head>
+  <div class="names">
+
+  </div>
+  <body>
+    {% loop for (heading list) on (cmark:node-children md)
+       when (and (typep heading 'cmark:heading-node)
+                 (typep list 'cmark:list-node)
+                 (= (cmark:node-heading-level heading) 2))
+       do %}
+      {{ card-group heading (cmark:node-children list) }}
+    {% end %}
+  </body>
+</html>
 {% end %}

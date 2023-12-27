@@ -4,7 +4,8 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defpackage #:bqncards.templates
-    (:use #:cl #:ten #:bqncards)))
+    (:use #:cl #:ten #:bqncards))
+  (ten:compile-template #p"src/template.html" :bqncards.templates))
 
 (defun parse-file (file)
   (with-open-file (s file :direction :input)
@@ -21,14 +22,20 @@
     (print-node child (1+ level))))
 
 (defun write-operator-page (md target)
-  (with-open-file (f target :direction :output :if-exists :overwrite)
+  (with-open-file (f target :direction :output :if-does-not-exist :create :if-exists :supersede)
     (write-string (bqncards.templates:operator-page md) f)))
 
+(defun write-main-page (md target)
+  (with-open-file (f target :direction :output :if-does-not-exist :create :if-exists :supersede)
+    (write-string (bqncards.templates:main-page md) f)))
+
 #+nil
-(write-operator-page (parse-file #p"doc/group.md") #p"dist/op/group.html")
+(write-operator-page (parse-file #p"doc/op/group.md") #p"dist/op/group.html")
 #+nil
-(print-node (parse-file #p"doc/group.md"))
+(progn
+  (ten:compile-template #p"src/template.html" :bqncards.templates)
+  (write-main-page (parse-file #p"doc/main.md") #p"dist/index.html"))
 #+nil
-(inspect (parse-file #p"doc/group.md"))
+(print-node (parse-file #p"doc/main.md"))
 #+nil
-(ten:compile-template #p"src/template.html" :bqncards.templates)
+(inspect (parse-file #p"doc/main.md"))
