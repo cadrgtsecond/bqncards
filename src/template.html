@@ -2,6 +2,8 @@
 {% dolist (node nodes) %}
   {% etypecase node %}
     {% cmark:text-node %}{{ cmark:node-literal node }}{% end %}
+    {% cmark:emph-node %}<em>{{ text (cmark:node-children node) }}</em>{% end %}
+
     {% cmark:link-node %}<a href="{{ cmark:node-url node }}">{{ text (cmark:node-children node) }}</a>{% end %}
     {% cmark:code-node %}<code>{{ cmark:node-literal node }}</code>{% end %}
   {% end %}
@@ -20,6 +22,7 @@
   {% cmark:heading-node %}{{ heading node }}{% end %}
   {% cmark:paragraph-node %}{{ text (cmark:node-children node) }}{% end %}
   {% cmark:code-block-node %}<pre>{{ cmark:node-literal node }}</pre>{% end %}
+    {% cmark:html-block-node %}{% begin-raw %}{{ cmark:node-literal node }}{% end %}{% end %}
   {% end %}
 {% end %}
 </article>

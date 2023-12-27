@@ -1,0 +1,25 @@
+
+<link rel="stylesheet" href="/css/index.css"/>
+<article class="operator-page">
+
+<h1>Find</h1>
+Find (<code>&#x2377;</code>) searches for occurrences of an array <code>&#x1D568;</code> within <code>&#x1D569;</code>. The result contains a boolean for each possible location, which is 1 if <code>&#x1D568;</code> was found there and 0 if not.<pre>    &quot;xx&quot; &#x2377; &quot;xxbdxxxcx&quot;
+</pre>More precisely, <code>&#x1D568;</code> needs to <a href="match.md">match</a> a contiguous selection from <code>&#x1D569;</code>, which for strings means a substring. These subarrays of <code>&#x1D569;</code> are also exactly the cells in the result of <a href="windows.md">Windows</a>. So we can use Windows to see all the arrays <code>&#x1D568;</code> will be compared against.<pre>    2 &#x2195; &quot;xxbdxxxcx&quot;
+
+    &quot;xx&quot;&#x22B8;&#x2261;&#x2D8; 2 &#x2195; &quot;xxbdxxxcx&quot;
+</pre>Like Windows, the result usually doesn&#039;t have the same dimensions as <code>&#x1D569;</code>. This is easier to see when <code>&#x1D568;</code> is longer. It differs from APL&#039;s version, which includes trailing 0s in order to maintain the same length. Bringing the size up to that of <code>&#x1D569;</code> is easy enough with <a href="take.md">Take</a> (<code>&#x2191;</code>), while shortening a padded result would be harder.<pre>    &quot;string&quot; &#x2377; &quot;substring&quot;
+
+    &quot;string&quot; (&#x2262;&#x2218;&#x22A2;&#x2191;&#x2377;) &quot;substring&quot;  # APL style
+</pre>If <code>&#x1D568;</code> is larger than <code>&#x1D569;</code>, the result is empty, and there&#039;s no error even in cases where Windows would fail. One place this tends to come up is when applying <a href="pick.md#first">First</a> (<code>&#x2291;</code>) to the result: <code>&#x2291;&#x2377;</code> tests whether <code>&#x1D568;</code> appears in <code>&#x1D569;</code> at the first position, that is, whether it&#039;s a prefix of <code>&#x1D569;</code>. If <code>&#x1D568;</code> is longer than <code>&#x1D569;</code> it shouldn&#039;t be a prefix. First will fail but using a <a href="fold.md">fold</a> <code>0&#x22A3;&#xB4;&#x2377;</code> instead gives a 0 in this case.<pre>    &quot;loooooong&quot; &#x2377; &quot;short&quot;
+
+    9 &#x2195; &quot;short&quot;
+
+    0 &#x22A3;&#xB4; &quot;loooooong&quot; &#x2377; &quot;short&quot;
+</pre>Adding a <a href="reshape.md#deshape">Deshape</a> gives <code>0&#x22A3;&#xB4;&#x294A;&#x2218;&#x2377;</code>, which works with the high-rank case discussed below. It tests whether <code>&#x1D568;</code> is a multi-dimensional prefix starting at the lowest-index corner of <code>&#x1D569;</code>.
+<h3>Higher ranks</h3>
+If <code>&#x1D568;</code> and <code>&#x1D569;</code> are two-dimensional then Find does a two-dimensional search. The cells used are also found in <code>&#x1D568;&#x2262;&#x22B8;&#x2195;&#x1D569;</code>. For example, the bottom-right corner of <code>&#x1D569;</code> below matches <code>&#x1D568;</code>, so there&#039;s a 1 in the bottom-right corner of the result.<pre>    &#x22A2; a &#x2190; 7 (4|&#x22C6;&#x2DC;)&#x231C;&#x25CB;&#x2195; 9   # Array with patterns
+
+    (0&#x203F;3&#x203F;0&#x224D;0&#x203F;1&#x203F;0) &#x2377; a
+</pre>It&#039;s also allowed for <code>&#x1D568;</code> to have a smaller rank than <code>&#x1D569;</code>; the axes of <code>&#x1D568;</code> then correspond to trailing axes of <code>&#x1D569;</code>, so that leading axes of <code>&#x1D569;</code> are mapped over. This is a minor violation of the <a href="leading.md">leading axis</a> principle, which would match axes of <code>&#x1D568;</code> to leading axes of <code>&#x1D569;</code> in order to make a function that&#039;s useful with the Rank operator, but such a function would be quite strange and hardly ever useful.<pre>    0&#x203F;1&#x203F;0&#x203F;1 &#x2377; a
+</pre>
+</article>

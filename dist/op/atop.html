@@ -1,0 +1,33 @@
+
+<link rel="stylesheet" href="/css/index.css"/>
+<article class="operator-page">
+
+<h1>Atop</h1>
+<table>
+  <thead>
+    <tr>
+      <th><code>Cmp</code></th>
+      <th><code>Cmp 𝕩</code></th>
+      <th><code>𝕨 Cmp 𝕩</code></th>
+      <th>Unified</th>
+      <th>On list</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>F∘G</code></td>
+      <td><code>F G 𝕩</code></td>
+      <td><code>F 𝕨 G 𝕩</code></td>
+      <td><code>{𝔽𝕨𝔾𝕩}</code></td>
+      <td><code>F G´𝕩</code></td>
+    </tr>
+  </tbody>
+</table>
+<br/>
+Of the two modifiers on this page, Atop is more common but less impactful. The composition <code>F&#x2218;G</code> is equivalent to the 2-<a href="train.md">train</a> <code>F G</code> (the trains page has hints on when you&#039;d choose one or the other). Its definition <code>{F&#x1D568;G&#x1D569;}</code> means that <code>G</code> is applied to one or two arguments and <code>F</code> is applied monadically to the result. It&#039;s sort of a &quot;default way&quot; to compose two functions. Keeps <a href="tacit.md">tacit</a> programming syntax running smoothly, without making noise about it. Not like that busybody <code>&#x22B8;</code>. Some examples:<code>&#x2195;&#x2218;&#x2260;</code> is useful with one argument: <code>&#x2195;&#x2260;l</code> is a list of indices for <code>l</code>.<code>&#x230A;&#x2218;&#xF7;</code> is useful with two arguments: <code>&#x230A;a&#xF7;b</code> is the integer part when dividing <code>a</code> by <code>b</code>, often paired with the <a href="arithmetic.md#additional-arithmetic">remainder</a> <code>b|a</code>.<code>&#x2294;&#x2218;&#x2290;</code> is useful with one or two arguments. From right to left, we have <a href="selfcmp.md#classify">Classify</a>/<a href="search.md#index-of">Index-of</a> (<code>&#x2290;</code>) to convert values to indices, and <a href="group.md">Group Indices</a> to group the indices. Er, that sounds good but what it <em>actually</em> does is to group indices of Group&#039;s argument, which correspond to indices of the original <code>&#x1D569;</code>, according to their values as returned by <code>&#x2290;</code>. Without a left argument, this means indices of <code>&#x1D569;</code> are grouped corresponding to <code>&#x2377;&#x1D569;</code>, and if <code>&#x1D568;</code> is provided the groups correspond to <code>&#x1D568;</code> instead.<pre>    &#x2294;&#x2218;&#x2290; &quot;bbeabee&quot;
+
+    &quot;abcde&quot; &#x2294;&#x2218;&#x2290; &quot;bbeabee&quot;
+</pre>
+<h2>Relation to Over</h2>
+Atop and Over are 2-modifiers that extend the idea of &quot;apply this, then that&quot; in two different ways. They&#039;re modelled after the mathematical notation f&#x2218;g to compose two functions, and both do the same thing when there&#039;s one argument: either <code>F&#x2218;G x</code> or <code>F&#x25CB;G x</code> is <code>F G x</code>.When there are two arguments, we might say Atop treats the right operand <code>&#x1D53E;</code> as primary and Over treats <code>&#x1D53D;</code> as primary&#x2014;the primary operand becomes dyadic while the other is always monadic. Atop applies <code>&#x1D53E;</code> directly, making it more like mathematical composition if we suppose that <code>&#x1D53E;</code> is a function that can take a pair of arguments. Over instead makes two calls to apply <code>&#x1D53E;</code> separately to both arguments, then passes the results to <code>&#x1D53D;</code>.
+</article>

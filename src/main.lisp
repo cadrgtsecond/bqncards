@@ -29,13 +29,21 @@
   (with-open-file (f target :direction :output :if-does-not-exist :create :if-exists :supersede)
     (write-string (bqncards.templates:main-page md) f)))
 
+(defun gen-op (name)
+  (write-operator-page
+    (parse-file (format nil "doc/op/~a.md" name))
+    (format nil "dist/op/~a.html" name)))
+
 #+nil
-(write-operator-page (parse-file #p"doc/op/group.md") #p"dist/op/group.html")
+(progn
+  (gen-op "group")
+  (gen-op "find")
+  (gen-op "atop"))
 #+nil
 (progn
   (ten:compile-template #p"src/template.html" :bqncards.templates)
   (write-main-page (parse-file #p"doc/main.md") #p"dist/index.html"))
 #+nil
-(print-node (parse-file #p"doc/main.md"))
+(print-node (parse-file #p"doc/op/atop.md"))
 #+nil
-(inspect (parse-file #p"doc/main.md"))
+(inspect (parse-file #p"doc/op/atop.md"))

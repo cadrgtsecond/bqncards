@@ -14,11 +14,11 @@ a {
   text-decoration-color: #508dd978;
 }
 
-article :is(textarea, pre, code, .primitives tr td:first-child) {
+is(textarea, pre, code, .primitives tr td:first-child) {
     color: #969698;
     background-color: #0c0d0e;
 }
-article :is(textarea, pre, .primitives tr td:first-child) {
+:is(textarea, pre, .primitives tr td:first-child) {
     margin-left: 2rem;
     margin-right: 2rem;
     padding: 2rem 0rem;
