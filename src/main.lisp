@@ -11,7 +11,7 @@
   (with-open-file (s file :direction :input)
     (cmark:parse-stream s)))
 
-;; From the docs
+;; From the mds
 (defun print-node (node &optional (level 0))
   "Recursively print each node and its children at progressively deeper
   levels"
@@ -31,8 +31,8 @@
 
 (defun gen-op (name)
   (write-operator-page
-    (parse-file (format nil "doc/op/~a.md" name))
-    (format nil "dist/op/~a.html" name)))
+    (parse-file (format nil "md/op/~a.md" name))
+    (format nil "docs/op/~a.html" name)))
 
 #+nil
 (progn
@@ -42,8 +42,8 @@
 #+nil
 (progn
   (ten:compile-template #p"src/template.html" :bqncards.templates)
-  (write-main-page (parse-file #p"doc/main.md") #p"dist/index.html"))
+  (write-main-page (parse-file #p"md/main.md") #p"docs/index.html"))
 #+nil
-(print-node (parse-file #p"doc/op/atop.md"))
+(print-node (parse-file #p"md/op/atop.md"))
 #+nil
-(inspect (parse-file #p"doc/op/atop.md"))
+(inspect (parse-file #p"md/op/atop.md"))
