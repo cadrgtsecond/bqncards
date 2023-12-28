@@ -1,14 +1,14 @@
 # BQN Cards
 
 ## Functions
-- [`⊔`](/op/group.html)
+- [`⊔`](/bqncards/op/group.html)
   - Group Diadic
-- [`=`](/op/equal.html)
+- [`=`](/bqncards/op/equal.html)
   - Length Monadic
   - Equal Diadic
-- [`⍷`](/op/find.html)
+- [`⍷`](/bqncards/op/find.html)
   - Find Diadic
 
 ## 2-modifiers
-- [`∘`](/op/atop.html)
+- [`∘`](/bqncards/op/atop.html)
   - Atop Diadic
