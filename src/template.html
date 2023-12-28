@@ -15,17 +15,24 @@
 {% end %}
 
 {% template operator-page (:output-whitespace nil) (md) %}
-<link rel="stylesheet" href="/bqncards/css/index.css"/>
-<article class="operator-page">
-{% dolist (node (cmark:node-children md)) %}
-  {% typecase node %}
-  {% cmark:heading-node %}{{ heading node }}{% end %}
-  {% cmark:paragraph-node %}{{ text (cmark:node-children node) }}{% end %}
-  {% cmark:code-block-node %}<pre>{{ cmark:node-literal node }}</pre>{% end %}
-    {% cmark:html-block-node %}{% begin-raw %}{{ cmark:node-literal node }}{% end %}{% end %}
-  {% end %}
-{% end %}
-</article>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    {% dolist (node (cmark:node-children md)) %}
+      {% typecase node %}
+      {% cmark:heading-node %}{{ heading node }}{% end %}
+      {% cmark:paragraph-node %}{{ text (cmark:node-children node) }}{% end %}
+      {% cmark:code-block-node %}<pre>{{ cmark:node-literal node }}</pre>{% end %}
+        {% cmark:html-block-node %}{% begin-raw %}{{ cmark:node-literal node }}{% end %}{% end %}
+      {% end %}
+    {% end %}
+    </article>
+  </body>
+</html>
 {% end %}
 
 {% template bqn-card (:output-whitespace nil) (nodes) %}
