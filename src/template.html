@@ -18,6 +18,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/bqncards/css/index.css"/>
   </head>
   <body>
@@ -37,7 +39,13 @@
 
 {% template bqn-card (:output-whitespace nil) (nodes) %}
 {% destructuring-bind (logo names) nodes %}
-  <a class="bqn-card" href="{{ cmark:node-url (car (cmark:node-children logo)) }}">
+  <a class="bqn-card"
+     href="{{ cmark:node-url (car (cmark:node-children logo)) }}"
+     {# Magic(tm) #}
+     hx-get="{{ cmark:node-url (car (cmark:node-children logo)) }}"
+     hx-target="#card-target"
+     hx-swap="innerHTML"
+     js-bqn-card>
     <code class="symb">{{ cmark:node-literal (car (cmark:node-children (car (cmark:node-children logo)))) }}</code>
     <div class="names">
     {% dolist (name (cmark:node-children names)) %}
@@ -59,18 +67,20 @@
       {{ bqn-card (cmark:node-children node) }}
   {% end %}
   </div>
-</div>
+</section>
 {% end %}
 
 {% template main-page (:output-whitespace nil) (md) %}
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/bqncards/css/index.css"/>
+    <script src="/bqncards/js/index.js" defer></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
   </head>
-  <div class="names">
-
-  </div>
   <body>
     {% loop for (heading list) on (cmark:node-children md)
        when (and (typep heading 'cmark:heading-node)
@@ -79,6 +89,11 @@
        do %}
       {{ card-group heading (cmark:node-children list) }}
     {% end %}
+    <dialog id="card-dialog">
+      <span class="close">X</span>
+      <div id="card-target">
+      </div>
+    </dialog>
   </body>
 </html>
 {% end %}

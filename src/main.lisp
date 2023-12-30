@@ -36,6 +36,7 @@
 
 #+nil
 (progn
+  (ten:compile-template #p"src/template.html" :bqncards.templates)
   (gen-op "group")
   (gen-op "find")
   (gen-op "atop"))

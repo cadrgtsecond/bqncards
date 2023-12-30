@@ -2,11 +2,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/bqncards/css/index.css"/>
+    <script src="/bqncards/js/index.js" defer></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
   </head>
-  <div class="names">
-
-  </div>
   <body>
     
 <section class="card-group">
@@ -15,7 +17,13 @@
 
   <div class="wrapper">
   
-  <a class="bqn-card" href="/bqncards/op/group.html">
+  <a class="bqn-card"
+     href="/bqncards/op/group.html"
+     
+     hx-get="/bqncards/op/group.html"
+     hx-target="#card-target"
+     hx-swap="innerHTML"
+     js-bqn-card>
     <code class="symb">&#x2294;</code>
     <div class="names">
     
@@ -24,7 +32,13 @@
     </div>
   </a>
 
-  <a class="bqn-card" href="/bqncards/op/equal.html">
+  <a class="bqn-card"
+     href="/bqncards/op/equal.html"
+     
+     hx-get="/bqncards/op/equal.html"
+     hx-target="#card-target"
+     hx-swap="innerHTML"
+     js-bqn-card>
     <code class="symb">=</code>
     <div class="names">
     
@@ -35,7 +49,13 @@
     </div>
   </a>
 
-  <a class="bqn-card" href="/bqncards/op/find.html">
+  <a class="bqn-card"
+     href="/bqncards/op/find.html"
+     
+     hx-get="/bqncards/op/find.html"
+     hx-target="#card-target"
+     hx-swap="innerHTML"
+     js-bqn-card>
     <code class="symb">&#x2377;</code>
     <div class="names">
     
@@ -45,7 +65,7 @@
   </a>
 
   </div>
-</div>
+</section>
 
 <section class="card-group">
   
@@ -53,7 +73,13 @@
 
   <div class="wrapper">
   
-  <a class="bqn-card" href="/bqncards/op/atop.html">
+  <a class="bqn-card"
+     href="/bqncards/op/atop.html"
+     
+     hx-get="/bqncards/op/atop.html"
+     hx-target="#card-target"
+     hx-swap="innerHTML"
+     js-bqn-card>
     <code class="symb">&#x2218;</code>
     <div class="names">
     
@@ -63,7 +89,12 @@
   </a>
 
   </div>
-</div>
+</section>
 
+    <dialog id="card-dialog">
+      <span class="close">X</span>
+      <div id="card-target">
+      </div>
+    </dialog>
   </body>
 </html>

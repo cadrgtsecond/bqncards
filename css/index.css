@@ -16,19 +16,30 @@ a {
 
 is(textarea, pre, code, .primitives tr td:first-child) {
     color: #969698;
-    background-color: #0c0d0e;
-}
-:is(textarea, pre, .primitives tr td:first-child) {
-    margin-left: 2rem;
-    margin-right: 2rem;
-    padding: 2rem 0rem;
+    background-color: var(--dark-background);
 }
 
-body {
+code {
+  font-size: 150%;
+}
+
+:is(textarea, pre, .primitives tr td:first-child) {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: 0.5rem 0rem;
+    font-size: 125%;
+}
+
+body, dialog {
   background: var(--background);
   color: var(--foreground);
   margin: 1rem;
 }
+dialog {
+  border: 2px;
+  width: max(min(17rem, 100vw), 80vw);
+}
+
 .operator-page {
   padding: 0rem 2rem;
 }
