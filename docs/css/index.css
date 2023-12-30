@@ -38,6 +38,7 @@ body, dialog {
 dialog {
   border: 2px;
   width: max(min(17rem, 100vw), 80vw);
+  margin: auto auto;
 }
 
 .operator-page {
