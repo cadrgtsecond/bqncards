@@ -9,6 +9,11 @@
   <body>
     <article class="operator-page">
     
+<h1>Deduplicate</h1>
+Deduplicate removes every major cell from the argument that matches an earlier cell, resulting in an array with the same rank but possibly a shorter length. It might also be described as returning the unique major cells of the argument, ordered by first occurrence. Deduplicate <a href="under.md">Under</a> <a href="reverse.md">Reverse</a> (<code>&#x2377;&#x233E;&#x233D;</code>) orders by last occurrence instead.<pre>    &#x2377; &gt;&quot;take&quot;&#x203F;&quot;drop&quot;&#x203F;&quot;drop&quot;&#x203F;&quot;pick&quot;&#x203F;&quot;take&quot;&#x203F;&quot;take&quot;
+
+    &#x2377;&#x233E;&#x233D; &gt;&quot;take&quot;&#x203F;&quot;drop&quot;&#x203F;&quot;drop&quot;&#x203F;&quot;pick&quot;&#x203F;&quot;take&quot;&#x203F;&quot;take&quot;
+</pre>
 <h1>Find</h1>
 Find (<code>&#x2377;</code>) searches for occurrences of an array <code>&#x1D568;</code> within <code>&#x1D569;</code>. The result contains a boolean for each possible location, which is 1 if <code>&#x1D568;</code> was found there and 0 if not.<pre>    &quot;xx&quot; &#x2377; &quot;xxbdxxxcx&quot;
 </pre>More precisely, <code>&#x1D568;</code> needs to <a href="match.md">match</a> a contiguous selection from <code>&#x1D569;</code>, which for strings means a substring. These subarrays of <code>&#x1D569;</code> are also exactly the cells in the result of <a href="windows.md">Windows</a>. So we can use Windows to see all the arrays <code>&#x1D568;</code> will be compared against.<pre>    2 &#x2195; &quot;xxbdxxxcx&quot;

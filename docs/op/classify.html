@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Classify</h1>
+Classify is the universal self-search function, in that it preserves all the self-search information in its argument. It gives each different cell value a natural number, ordered by first appearance.<pre>    &#x2290; 5&#x203F;6&#x203F;2&#x203F;2&#x203F;5&#x203F;1
+</pre><a href="couple.md">Coupling</a> the argument to the result shows how values are numbered. Each <code>5</code> is <code>0</code> in the result, each <code>6</code> is <code>1</code>, <code>2</code> is <code>2</code> in this particular case, and <code>1</code> is <code>3</code>.<pre>    &#x224D;&#x27DC;&#x2290; 5&#x203F;6&#x203F;2&#x203F;2&#x203F;5&#x203F;1
+</pre>Applying Classify before another self-search function will never change the result, except in the case of Deduplicate (<code>&#x2377;</code>), which constructs its result from cells in the argument. In particular, Classify is <a href="https://en.wikipedia.org/wiki/Idempotent">idempotent</a>, meaning that applying it twice is the same as applying it once.<pre>    &#x220A;   &quot;dbaedcbcecbcd&quot;
+    &#x220A; &#x2290; &quot;dbaedcbcecbcd&quot;
+
+    {(&#x1D54F;&#x2261;&#x1D54F;&#x2218;&#x2290;)&quot;dbaedcbcecbcd&quot;}&#xA8; &#x2290;&#x203F;&#x2292;&#x203F;&#x220A;&#x203F;&#x2377;
+</pre>
+<h3>Classify and Deduplicate</h3>
+Classify is also related to <a href="#deduplicate">Deduplicate</a>. In a way they are complements: applying both in sequence always gives a completely uninteresting result!<pre>    &#x22A2; c &#x2190; &gt;&quot;yellow&quot;&#x203F;&quot;orange&quot;&#x203F;&quot;yellow&quot;&#x203F;&quot;purple&quot;&#x203F;&quot;orange&quot;&#x203F;&quot;yellow&quot;
+    &#x2377; &#x2290; c
+    &#x2290; &#x2377; c
+</pre>Applying both separately is a different story, and gives completely interesting results. These results contain all information from the original argument, as <code>&#x2377;</code> indicates which cells it contained and <code>&#x2290;</code> indicates where they were located. The function <a href="select.md">Select</a> (<code>&#x228F;</code>) reconstructs the argument from the two values.<pre>    &#x2377; c
+    &#x2290; c
+    (&#x2290;c) &#x228F; (&#x2377;c)
+</pre>One way to view this relationship is from the perspective of linear algebra, where an idempotent transformation is called a &quot;projection&quot;. That means that the argument might be any value but the result is part of a smaller class of values, and any argument from that smaller class is left the same. What arrays do the two functions project to? The result of Deduplicate is an array with no repeated major cells. The result of Classify is a list of natural numbers, but it also has an additional property: each number in the list is at most one higher than the previous numbers, and the first number is zero. This comes from the way Classify numbers the cells of its argument. When it finds a cell that hasn&#039;t appeared before (at a lower index), it always chooses the next higher number for it.Applying both Classify and Deduplicate gives an array that has both properties (this isn&#039;t the case for all pairs of projections&#x2014;we need to know that Classify maintains the uniqueness property for Deduplicate and vice-versa). It has no duplicate major cells, <em>and</em> it&#039;s a list of natural numbers that starts with 0 and never goes up by more than one. Taken together, these are a tight constraint! The first element of the argument has to be 0. The next can&#039;t be 0 because it&#039;s already appeared, but it can&#039;t be more than one higher&#x2014;it has to be 1. The next can&#039;t be 0 or 1, and has to be 2. And so on. So the result is always <code>&#x2195;n</code> for some <code>n</code>. It&#039;s possible to determine the length as well, by noting that each function preserves the number of unique major cells in its argument. Classify does this because distinct numbers in the output correspond exactly to distinct major cells in the input; Deduplicate does this because it only removes duplicate cells, not distinct ones. So the final result is <code>&#x2195;n</code>, where <code>n</code> is the number of unique major cells in the argument.
+<h2>Index of</h2>
+Index of (<code>&#x2290;</code>) returns the index of the first occurrence of each entry in <code>&#x1D568;</code>, or <code>&#x2260;&#x1D568;</code> if an entry doesn&#039;t appear in <code>&#x1D568;</code> at all.<pre>    &quot;zero&quot;&#x203F;&quot;one&quot;&#x203F;&quot;two&quot;&#x203F;&quot;three&quot; &#x2290; &quot;one&quot;&#x203F;&quot;eight&quot;&#x203F;&quot;two&quot;
+</pre><code>&#x1D569;&#x220A;&#x1D568;</code> is the same as <code>(&#x1D568;&#x2290;&#x1D569;)&lt;&#x2260;&#x1D568;</code>. Note the reversal of arguments! In both <code>&#x220A;</code> and <code>&#x2290;</code>, the open side points to the searched-in argument and the closed side points to the searched-for argument. Relatedly, in Select (<code>&#x228F;</code>), the open side points to the selected argument, which is more like the searched-in argument in that its cells are generally accessed out of order (the searched-for argument is most like the selection result <code>&#x1D568;&#x228F;&#x1D569;</code>).Index of always returns exactly one number, even if there are multiple matches, or no matches at all. To find the indices of all matches, start with <a href="match.md">Match</a> <a href="map.md">Each</a>, then apply <a href="replicate.md#indices">Indices</a> (I didn&#039;t mean for it to sound so repetitive! It just happened!).<pre>    / &quot;letters&quot; &#x2261;&#xA8;&lt; &#039;e&#039;        # Many to one
+
+    &quot;letters&quot; (&lt;&#x2218;/&#x2D8;&#x2261;&#x231C;&#x2DC;) &quot;let&quot;  # Many to many
+</pre>
+    </article>
+  </body>
+</html>

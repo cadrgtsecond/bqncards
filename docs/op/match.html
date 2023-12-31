@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Depth</h1>
+To find the depth of an array, use Depth (<code>&#x2261;</code>). For example, the depth of a list of numbers or characters is 1:<pre>    &#x2261; 2&#x203F;3&#x203F;4
+    &#x2261; &quot;a string is a list of characters&quot;
+</pre>Depth is somewhat analogous to an array&#039;s <a href="shape.md">rank</a> <code>=&#x1D569;</code>, and in fact rank can be &quot;converted&quot; to depth by splitting rows with <code>&lt;&#x2389;1</code> (<a href="enclose.md">Enclose</a> <a href="rank.md">Rank</a> 1), reducing the rank by 1 and increasing the depth. Unlike rank, Depth doesn&#039;t care at all about its argument&#039;s shape:<pre>    &#x2261; 3&#x203F;4&#x294A;&quot;characters&quot;
+    &#x2261; (1+&#x2195;10)&#x294A;&quot;characters&quot;
+</pre>Also unlike rank, Depth <em>does</em> care about the elements of its argument: in fact, to find the depth of an array, every element must be inspected recursively.<pre>    &#x2261; &#x27E8;2,3,4,5&#x27E9;
+    &#x2261; &#x27E8;2,&lt;3,4,5&#x27E9;
+    &#x2261; &#x27E8;2,&lt;3,4,&lt;&lt;&lt;5&#x27E9;
+</pre>The depth of an array is the maximum of its elements&#039; depths, plus one. The base case, an atom (including a function or modifier), has depth 0.<pre>    &#x2261; &#039;c&#039;
+    F&#x2190;+ &#x22C4; &#x2261;f
+    &#x2261; &#x27E8;&#039;c&#039;,f,2&#x27E9;
+</pre>Using <code>0=&#x2022;Type</code> to test whether <code>&#x1D569;</code> is an array, as well as the <a href="choose.md">Choose</a> modifier, we can write a recursive definition of Depth.<pre>Depth &#x2190; (0=&#x2022;Type)&#x25F6;0&#x203F;{1+0&#x2308;&#xB4;Depth&#xA8;&#x294A;&#x1D569;}
+</pre>The minimum element depth of 0 implies that an empty array&#039;s depth is 1.<pre>    &#x2261;&#x27E8;&#x27E9;
+    &#x2261;2&#x203F;0&#x203F;3&#x294A;0
+</pre>
+<h1>Match</h1>
+The primitive Match (<code>&#x2261;</code>) tests whether its two argument arrays are considered equivalent in BQN, returning <code>1</code> if so and <code>0</code> otherwise. Not Match (<code>&#x2262;</code>) is the opposite, returning <code>1</code> if the two arrays aren&#039;t equivalent and <code>0</code> if they are.<pre>    &quot;abc&quot; &#x2261; &#039;a&#039;&#x203F;&#039;b&#039;&#x203F;&#039;c&#039;
+    4 &#x2262; &lt;4
+</pre>Match always gives the same result as <a href="arithmetic.md#comparisons">Equals</a> (<code>=</code>) when both arguments are atoms, but the two functions are extended to arrays differently: while the pervasive Equals maps over array arguments to return an array of results, Match compares them in totality and always returns one boolean (it never gives an error). Match is the basis for BQN&#039;s <a href="search.md">search</a> and <a href="selfcmp.md">self-search</a> functions.<pre>    &quot;abc&quot; = &quot;acc&quot;
+    &quot;abc&quot; &#x2261; &quot;acc&quot;
+
+    &quot;abc&quot; = &quot;ab&quot;  # Mismatched shapes
+    &quot;abc&quot; &#x2261; &quot;ab&quot;
+</pre>Match compares arrays based on their fundamental properties&#x2014;<a href="shape.md">shape</a> and elements&#x2014;and not the <a href="fill.md">fill element</a>, which is an inferred property. Since it can be computed differently in different implementations, using the fill element in Match could lead to some confusing results. Even if the implementation doesn&#039;t define a fill for <code>&#039;a&#039;&#x203F;&#039;b&#039;&#x203F;&#039;c&#039;</code>, it should still be considered to match <code>&quot;abc&quot;</code>.To give a precise definition, two arrays are considered to match if they have the same shape and all corresponding elements from the two arrays match. Every array has a finite <a href="depth.md">depth</a>, so this recursive definition always ends up comparing non-arrays, or atoms. And because an array never matches an atom, the result if only one argument is an atom is <code>0</code>. The interesting case is when both arguments are atoms, discussed below.
+<h2>Atomic equality</h2>
+Atoms in BQN have six possible <a href="types.md">types</a>: number, character, function, 1-modifier, 2-modifier, and namespace. Equality testing isn&#039;t allowed to fail for any two arguments, so it needs to be defined on all of these types.Starting with the easiest rules, values with different types are never equal to each other.<pre>    &#x27E8;&#039;a&#039;, +, 3&#x27E9; = &#x27E8;-&#x27DC;&#xBB;, &#039;+&#039;, 3&#x2D9;&#x27E9;
+</pre>Two characters are equal when they have the same code point. Numeric equality depends on the number system in use, but probably works about how you expect. If you&#039;re coming from APL, note that BQN doesn&#039;t use comparison tolerance. To see if two floats are roughly equal you&#039;ll need to write a tolerant comparison yourself, but how often do you really need to do this?<pre>    &#039;x&#039; = &quot;wxyz&quot;
+
+    1.25 = 1 + 0.25
+</pre>Operations and namespaces are more difficult. Here there are three cases:The first two are fairly similar to how numbers and arrays work. Primitives and compounds like trains, or modifiers with bound operands, are immutable, so they&#039;re defined purely by what components they contain.<pre>    &#x27E8;+,-,&#xD7;&#x27E9; = &#x27E8;+,-,&#xF7;&#x27E9;
+
+    &#x27E8;+ - &#xD7;&#x27E9; = &#x27E8;+ - &#xF7;&#x27E9;  # Compare two three-trains component-wise
+
+    &#x27E8;+ - &#xF7;&#x27E9; = &#x27E8;+ - &#xF7;&#x27E9;
+</pre>This approach can&#039;t tell you whether two functions are mathematically different&#x2014;that is, whether they ever return different results given the same arguments (this is an undecidable problem, and also gets confusing since &quot;different&quot; is included in its own definition). However, if two functions compare equal, then they will always return the same results.
+<h3>Block equality</h3>
+The final point above about block instances is subtler. An instance of a block function or modifier is <a href="lexical.md#mutation">mutable</a>, meaning that its behavior can change over the course of a program. Consider the following two functions:<pre>    F&#x203F;G &#x2190; { a&#x2190;10 &#x22C4; {a+&#x1D569;}&#x203F;{a&#x21A9;&#x1D569;} }
+
+    F 5   # One result
+    G 8
+    F 5   # Another result&#x2014;the definition of insanity!
+</pre>(A side note is that BQN restricts what can cause these side effects: they can only happen by calling a block function or modifier, and never a primitive or purely <a href="tacit.md">tacit</a> operation). Now suppose we share the value of <code>F</code> with another variable like <code>F1</code> below. When we apply <code>G</code>, the result of <code>F</code> might change, but so does <code>F1</code>! This effect is called <a href="https://en.wikipedia.org/wiki/Aliasing_(computing)">aliasing</a>.<pre>    F1 &#x2190; F
+    {&#x1D54F; 6}&#xA8; F&#x203F;F1
+
+    G 3
+    {&#x1D54F; 6}&#xA8; F&#x203F;F1
+</pre>In some cases you might not be able to demonstrate aliasing so cleanly. A function such as a random number generator changes its own state, so calling one function will change the other. But comparison tells you directly whether two blocks are the same.<pre>    f = f1
+</pre>As with other kinds of functions, just because two blocks always behave the same doesn&#039;t mean they are equal. Any function that&#039;s written as <code>{&#x1D569;}</code> will always work the same as other functions spelled that way, but the two functions below are different instances because they come from two different places in the source code.<pre>    =&#xB4; {&#x1D569;}&#x203F;{&#x1D569;}
+</pre>Two blocks that come from the same source code location could also be different. Consider the following code, featuring a function that creates block functions:<pre>    Gen &#x2190; { a&#x2190;&#x1D569; &#x22C4; {a&#xD7;&#x1D569;} }
+    t2 &#x2190; Gen 2
+    t3 &#x2190; Gen 3
+    {&#x1D54F; 4}&#xA8; T2&#x203F;T3
+</pre>These functions both have the definition <code>{a&#xD7;&#x1D569;}</code>, but give different results! They are different <em>instances</em> of the same block, and have different environments: for <code>T2</code>, <code>a</code> is <code>2</code>, and for <code>T3</code>, it&#039;s <code>3</code>.<pre>    t2 = t3
+</pre>Some definitions should help to make things clearer. A &quot;block&quot; is not actually a BQN value, but a region of source code enclosed in <code>{}</code> brackets. When the program encounters a block function or modifier, it creates an instance of this block, and then uses this instance in the rest of the expression (actually, an immediate block also creates an instance, but this instance is immediately run, and discarded when it finishes, so it can&#039;t be accessed as a value). Every time the function <code>Gen</code> is run, it evaluates the statements it contains, and the second statement <code>{a&#xD7;&#x1D569;}</code> creates a block instance. So <code>Gen</code> creates a new block instance each time. This is necessary for <code>Gen</code> to work correctly: each time it runs, it creates a new scope, so it needs to create a new function that will be tied to that scope.
+    </article>
+  </body>
+</html>

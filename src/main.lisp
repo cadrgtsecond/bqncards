@@ -39,7 +39,15 @@
   (ten:compile-template #p"src/template.html" :bqncards.templates)
   (gen-op "group")
   (gen-op "find")
-  (gen-op "atop"))
+  (gen-op "atop")
+  (gen-op "select")
+  (gen-op "pick")
+  (gen-op "member")
+  (gen-op "match")
+  (gen-op "depth"
+  (gen-op "over")
+  (gen-op "classify")
+  (gen-op "ocur"))
 #+nil
 (progn
   (ten:compile-template #p"src/template.html" :bqncards.templates)

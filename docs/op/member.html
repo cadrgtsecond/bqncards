@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Member of</h1>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Name</th>
+      <th>for</th>
+      <th>in</th>
+      <th>Return</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>∊</code></td>
+      <td>Member of</td>
+      <td><code>𝕨</code></td>
+      <td><code>𝕩</code></td>
+      <td><code>1</code> if found, <code>0</code> if not</td>
+    </tr>
+  </tbody>
+</table>
+The simplest of the search functions, Member of (<code>&#x220A;</code>) returns <code>1</code> if an entry in <code>&#x1D568;</code> matches some entry in <code>&#x1D569;</code>, and <code>0</code> if it doesn&#039;t.<pre>    &quot;green&quot;&#x203F;&quot;bricks&quot;&#x203F;&quot;cow&quot;&#x203F;&quot;blue&quot; &#x220A; &quot;red&quot;&#x203F;&quot;green&quot;&#x203F;&quot;blue&quot;
+</pre>The result is independent of the ordering of <code>&#x1D569;</code>: all that matters is which cells it contains.Member of can be used in a <a href="train.md">train</a> to compute the set intersection and difference of two arrays. For example, <code>&#x220A;/&#x22A3;</code> uses <code>&#x1D568;&#x220A;&#x1D569;</code> to <a href="replicate.md">filter</a> <code>&#x1D568;</code> (from <code>&#x1D568;&#x22A3;&#x1D569;</code>), giving an intersection.<pre>    &quot;initial set&quot; (&#x220A;/&#x22A3;) &quot;intersect&quot;     # Keep &#x1D569;
+
+    &quot;initial set&quot; (&#xAC;&#x2218;&#x220A;/&#x22A3;) &quot;difference&quot;  # Remove &#x1D569;
+</pre>These functions appear in APL as Intersect (<code>&#x2229;</code>) and Without (<code>~</code>). Really, only <code>&#x1D569;</code> is treated like a set, while the ordering and multiplicity of elements of <code>&#x1D568;</code> are maintained. I think the explicit implementations show this well, since <code>&#x1D569;</code> is only used as the right argument to <code>&#x220A;</code>, and prefer this clarity to the brevity of a single symbol.
+<h1>Mark Firsts</h1>
+Mark Firsts (<code>&#x220A;</code>) is the simplest numeric self-search function: it returns <code>0</code> for any major cell of the argument that is a duplicate of an earlier cell and <code>1</code> for a major cell that&#039;s the first with its value. To implement <a href="#deduplicate">Deduplicate</a> in terms of Mark Firsts, just <a href="replicate.md">filter</a> out the duplicates with <code>&#x220A;&#x22B8;/</code>.<pre>    &#x220A;   3&#x203F;1&#x203F;4&#x203F;1&#x203F;5&#x203F;9&#x203F;2&#x203F;6&#x203F;5
+
+    &#x220A;&#x22B8;/ 3&#x203F;1&#x203F;4&#x203F;1&#x203F;5&#x203F;9&#x203F;2&#x203F;6&#x203F;5
+</pre>Mark Firsts has other uses, of course. Instead of keeping the unique values, you might remove the first of each value with <code>&#xAC;&#x2218;&#x220A;&#x22B8;/</code>. You can use <code>&#x2227;&#xB4;&#x220A;</code> to check that an array has no duplicate major cells, or <code>+&#xB4;&#x220A;</code> to count the number of unique ones.What about marking the elements that appear exactly once? There&#039;s a trick for this: find the cells that are firsts running both forwards (<code>&#x220A;</code>) and <a href="reverse.md">backwards</a> (<code>&#x220A;&#x233E;&#x233D;</code>). Such a cell has no equal before it, nor after it, so it&#039;s unique in the entire array.<pre>    (&#x220A;&#x2227;&#x220A;&#x233E;&#x233D;) &quot;duck&quot;&#x203F;&quot;duck&quot;&#x203F;&quot;teal&quot;&#x203F;&quot;duck&quot;&#x203F;&quot;goose&quot;
+</pre>Remember that you don&#039;t have to apply the result of Mark Firsts to the same array you got it from! For example, it might be useful in a database application to find unique values in a particular column but use these to filter the entire table, or one other column.
+    </article>
+  </body>
+</html>

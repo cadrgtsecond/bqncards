@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h2>The Depth modifier</h2>
+The Depth 2-modifier (<code>&#x2687;</code>) is a generalization of <a href="map.md">Each</a> that allows diving deeper into an array. To illustrate it we&#039;ll use a shape <code>4&#x203F;2</code> array of lists of lists.<pre>    &#x22A2; n &#x2190; &lt;&#x2389;1&#x235F;2 4&#x203F;2&#x203F;2&#x203F;3&#x294A;&#x2195;48
+    &#x2261; n
+</pre>Reversing <code>n</code> swaps all the rows:<pre>    &#x233D; n
+</pre>Depth <code>&#xAF;1</code> is equivalent to Each, and reverses the larger lists, while depth <code>&#xAF;2</code> applies Each twice to reverse the smaller lists:<pre>    &#x233D;&#x2687;&#xAF;1 n
+    &#x233D;&#x2687;&#xAF;2 n
+</pre>While a negative depth tells how many levels to go down, a non-negative depth gives the maximum depth of the argument before applying the left operand. On a depth-3 array like above, depth <code>2</code> is equivalent to <code>&#xAF;1</code> and depth <code>1</code> is equivalent to <code>&#xAF;2</code>. A depth of <code>0</code> means to descend all the way to the level of atoms, that is, apply <a href="arithmetic.md#pervasion">pervasively</a>, like an arithmetic function.<pre>    &#x27E8;&#039;a&#039;,&quot;bc&quot;&#x27E9; &#x224D;&#x2687;0 &#x27E8;2&#x203F;3,4&#x27E9;
+</pre>With a positive operand, Depth doesn&#039;t have to use the same depth everywhere. Here, <a href="shape.md">Length</a> is applied as soon as the depth for a particular element is 1 or less, including if the argument has depth 0. For example, it maps over <code>&#x27E8;2,&#x27E8;3,4&#x27E9;&#x27E9;</code>, but not over <code>&#x27E8;11,12&#x27E9;</code>, even though these are elements of the same array.<pre>    &#x2260;&#x2687;1 &#x27E8;1,&#x27E8;2,&#x27E8;3,4&#x27E9;&#x27E9;,&#x27E8;5,&#x27E8;6,7&#x27E9;,&#x27E8;8,9,10&#x27E9;&#x27E9;,&#x27E8;11,12&#x27E9;&#x27E9;
+</pre><a href="rank.md#multiple-and-computed-ranks">Like the Rank modifier</a>, the right operand <code>&#x1D53E;</code> is really a function that returns the depth to be used, and that depth can be a single number, or a list of one to three numbers. One number gives the same depth to all arguments, two correspond to <code>&#x1D568;</code> and <code>&#x1D569;</code>, and three to monadic <code>&#x1D569;</code>, and dyadic <code>&#x1D568;</code> and <code>&#x1D569;</code>.
+    </article>
+  </body>
+</html>

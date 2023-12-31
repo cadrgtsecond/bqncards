@@ -1,3 +1,11 @@
+# Deduplicate
+
+Deduplicate removes every major cell from the argument that matches an earlier cell, resulting in an array with the same rank but possibly a shorter length. It might also be described as returning the unique major cells of the argument, ordered by first occurrence. Deduplicate [Under](under.md) [Reverse](reverse.md) (`⍷⌾⌽`) orders by last occurrence instead.
+
+        ⍷ >"take"‿"drop"‿"drop"‿"pick"‿"take"‿"take"
+
+        ⍷⌾⌽ >"take"‿"drop"‿"drop"‿"pick"‿"take"‿"take"
+
 # Find
 
 Find (`⍷`) searches for occurrences of an array `𝕨` within `𝕩`. The result contains a boolean for each possible location, which is 1 if `𝕨` was found there and 0 if not.

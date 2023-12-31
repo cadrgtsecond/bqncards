@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Pick</h1>
+Pick (<code>&#x2291;</code>) chooses elements from <code>&#x1D569;</code> based on <a href="indices.md">index</a> lists from <code>&#x1D568;</code>. <code>&#x1D568;</code> can be a plain list, or even one number if <code>&#x1D569;</code> is a list, in order to get one element from <code>&#x1D569;</code>. It can also be an array of index lists, or have deeper array structure: each index list will be replaced with the element of <code>&#x1D569;</code> at that index, effectively applying to <code>&#x1D568;</code> at <a href="depth.md#the-depth-modifier">depth</a> 1.The one-argument form is called First, and <code>&#x2291;&#x1D569;</code> takes the first element of <code>&#x1D569;</code> in index order, with an error if <code>&#x1D569;</code> is empty.While sometimes &quot;scatter-point&quot; indexing is necessary, using Pick to select multiple elements from <code>&#x1D569;</code> is less array-oriented than <a href="select.md">Select</a> (<code>&#x228F;</code>), and probably slower. Consider rearranging your data so that you can select along axes instead of picking out elements.
+<h2>One element</h2>
+When the left argument is a number, Pick gets an element from a list:<pre>    2 &#x2291; 0&#x203F;1&#x203F;2&#x203F;3&#x203F;4
+    2 &#x2291; &quot;abc&quot;
+    2 &#x2291; &#x27E8;@, 0&#x203F;1&#x203F;2&#x203F;3, &quot;abc&quot;&#x27E9;
+</pre>A negative number <code>&#x1D568;</code> behaves like <code>&#x1D568;+&#x2260;&#x1D569;</code>, so that <code>&#xAF;1</code> will select the last element, and <code>-&#x2260;&#x1D569;</code> the first. A number in <code>&#x1D568;</code> must be an integer less than <code>&#x2260;&#x1D569;</code> but not less than <code>-&#x2260;&#x1D569;</code>.<pre>    &#xAF;2 &#x2291; 0&#x203F;1&#x203F;2&#x203F;3&#x203F;4
+    &#xAF;2 &#x2291; &quot;abc&quot;
+</pre>Making <code>&#x1D569;</code> a list is only a special case. In general <code>&#x1D568;</code> can be a list of numbers whose length is <code>&#x1D569;</code>&#039;s rank. So when <code>=&#x1D569;</code> is 1, <code>&#x1D568;</code> can be length-1 list. The case above where <code>&#x1D568;</code> is a number is a simplification, but an enclosed number <code>&#x1D568;</code> isn&#039;t allowed because it could be confused with the nested case described below.<pre>    &#x27E8;2,0&#x27E9; &#x2291; &#x2195;4&#x203F;5
+</pre>Above we see that picking from the result of <a href="range.md">Range</a> gives the index. For something slightly more interesting, here&#039;s a character array:<pre>    &#x22A2; a &#x2190; &#039;a&#039; + &#x294A;&#x27DC;(&#x2195;&#xD7;&#xB4;) 4&#x203F;5
+    2&#x203F;0 &#x2291; a
+    1&#x203F;&#xAF;1 &#x2291; a
+</pre><code>&#x1D569;</code> can even be a <a href="enclose.md#whats-a-unit">unit</a>. By definition it has rank 0, so the only possible value for <code>&#x1D568;</code> is the empty list. This extracts an <a href="enclose.md">enclosed</a> element, and returns an atom unchanged&#x2014;the atom is promoted to an array by enclosing it, then the action of Pick undoes this. But there&#039;s rarely a reason to use this case, because the monadic form First accomplishes the same thing.<pre>    &#x27E8;&#x27E9; &#x2291; &lt;&#039;a&#039;
+    &#x27E8;&#x27E9; &#x2291; &#039;a&#039;
+</pre>
+<h3>First</h3>
+With no left argument, <code>&#x2291;</code> is called First, and is the same as Pick with a default left argument <code>0&#xA8;&#x2262;&#x1D569;</code>. For a non-empty array it returns the first element in index order.<pre>    &#x2291; &lt;&#039;a&#039;
+    &#x2291; &quot;First&quot;
+    &#x2291; &#x2195;4&#x203F;2&#x203F;5&#x203F;1
+</pre>And if <code>&#x1D569;</code> is empty then First results in an error.<pre>    &#x2291; &quot;&quot;
+
+    &#x2291; &#x2262;&#x3C0;
+</pre>In APL it&#039;s common to get the last element of a list with an idiom that translates to <code>&#x2291;&#x233D;</code>, or First-<a href="reverse.md">Reverse</a>. In BQN the most straightforward way is to select with index <code>&#xAF;1</code> instead. I also sometimes use <a href="fold.md">Fold</a> with the Right <a href="identity.md">identity function</a>.<pre>    &#x2291;&#x233D; &quot;last&quot;
+    &#xAF;1&#x2291; &quot;last&quot;
+    &#x22A2;&#xB4; &quot;last&quot;
+</pre>
+<h2>Many elements</h2>
+Pick also accepts a list of indices:<pre>    a  # Defined above
+
+    &#x27E8;2&#x203F;0, 1&#x203F;&#xAF;1, 3&#x203F;1, &#xAF;1&#x203F;&#xAF;1&#x27E9; &#x2291; a
+</pre>These indices have to be lists, since if they&#039;re numbers it just looks like <code>&#x1D568;</code> is an index list for one element.<pre>    &#x27E8;2,1,0,&#xAF;1&#x27E9; &#x2291; &quot;abc&quot;  # &#x1D569; doesn&#039;t have rank 4!
+
+    &#x27E8;2,1,0,&#xAF;1&#x27E9; &#x294A;&#xA8;&#x22B8;&#x2291; &quot;abc&quot;
+
+    &#x27E8;2,1,0,&#xAF;1&#x27E9; &#x228F; &quot;abc&quot;  # Better way
+</pre>It&#039;s much more general than just a list of indices though. As long as your indices are lists, you can arrange them in any array structure with arbitrary nesting.<pre>    &#x27E8;2&#x203F;0, &#x27E8;&#x27E8;1&#x203F;&#xAF;1, 3&#x203F;1&#x27E9;, &#xAF;1&#x203F;&#xAF;1&#x27E9;&#x27E9; &#x2291; a
+
+    (&#x27E8;2&#x203F;0, 1&#x203F;&#xAF;1&#x27E9;&#x224D;&#x27E8;3&#x203F;1, &#xAF;1&#x203F;&#xAF;1&#x27E9;) &#x2291; a
+
+    (&#x27E8;2&#x203F;0, &lt;1&#x203F;&#xAF;1&#x27E9;&#x224D;&#x27E8;&lt;3&#x203F;1, &#xAF;1&#x203F;&#xAF;1&#x27E9;) &#x2291; a
+</pre>This option is easily described using the <a href="depth.md#the-depth-modifier">Depth modifier</a>. Pick applies to depth-1 components of the left argument and the entire right argument, which corresponds to a depth operand of <code>1&#x203F;&#x221E;</code>. The left argument components have to be lists of numbers, or Pick gives an error.<pre>    (&#x27E8;2&#x203F;0, &lt;1&#x203F;&#xAF;1&#x27E9;&#x224D;&#x27E8;&lt;3&#x203F;1, &#xAF;1&#x203F;&#xAF;1&#x27E9;) &#x2291;&#x2687;1&#x203F;&#x221E; a
+
+    &#x27E8;&#x27E8;2,3&#x27E9;,1&#x27E9; &#x2291; a  # 1 isn&#039;t a valid index
+</pre>
+    </article>
+  </body>
+</html>

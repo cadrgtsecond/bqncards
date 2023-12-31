@@ -21,7 +21,7 @@
 </table>
 <br/>
 
-Of the two modifiers on this page, Atop is more common but less impactful. The composition `F∘G` is equivalent to the 2-[train](train.md) `F G` (the trains page has hints on when you'd choose one or the other). Its definition `{F𝕨G𝕩}` means that `G` is applied to one or two arguments and `F` is applied monadically to the result. It's sort of a "default way" to compose two functions. Keeps [tacit](tacit.md) programming syntax running smoothly, without making noise about it. Not like that busybody `⊸`. Some examples:
+Of the two composing modifiers, Atop is more common but less impactful. The composition `F∘G` is equivalent to the 2-[train](train.md) `F G` (the trains page has hints on when you'd choose one or the other). Its definition `{F𝕨G𝕩}` means that `G` is applied to one or two arguments and `F` is applied monadically to the result. It's sort of a "default way" to compose two functions. Keeps [tacit](tacit.md) programming syntax running smoothly, without making noise about it. Not like that busybody `⊸`. Some examples:
 
 `↕∘≠` is useful with one argument: `↕≠l` is a list of indices for `l`.
 

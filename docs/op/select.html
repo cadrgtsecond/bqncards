@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Select</h1>
+The function Select (<code>&#x228F;</code>) reorganizes the array <code>&#x1D569;</code> along one or more axes based on <a href="indices.md">indices</a> given by <code>&#x1D568;</code>. The result has the same <a href="depth.md">depth</a> as <code>&#x1D569;</code>, since its elements are always elements of <code>&#x1D569;</code>. This means it differs from <a href="pick.md">Pick</a> (<code>&#x2291;</code>), which takes elements from <code>&#x1D569;</code> but can arrange them in any nested structure, including returning an element directly.The monadic form First Cell (<code>&#x228F;</code>) gets the major cell with index 0, so that <code>&#x228F;&#x1D569;</code> is identical to <code>0&#x228F;&#x1D569;</code>.
+<h2>Single selection</h2>
+The <a href="array.md#cells">major cells</a> of an array are arranged along the <a href="leading.md">first axis</a> and numbered starting at 0. For a natural number <code>&#x1D568;</code>, Select returns the major cell of <code>&#x1D569;</code> with index <code>&#x1D568;</code>.<pre>    2 &#x228F; &quot;abcdef&quot;  # An enclosed element
+
+    2 &#x2291; &quot;abcdef&quot;  # Pick gets a non-enclosed element
+
+    2 &#x228F; &gt;&quot;nul&quot;&#x203F;&quot;one&quot;&#x203F;&quot;two&quot;&#x203F;&quot;tre&quot;&#x203F;&quot;for&quot;
+
+    0 &#x228F; &lt;5  # No first axis to select from
+</pre>As a major cell, the result has rank one less than <code>&#x1D569;</code> and shape <code>1&#x2193;&#x2262;&#x1D569;</code>. Of course <code>&#x1D569;</code> must have at least one axis to select along, or there are no major cells and you&#039;ll get an error.The index <code>&#x1D568;</code> has to be an integer less than <code>&#x2260;&#x1D569;</code>. It can be negative, in which case it must be greater than or equal to <code>-&#x2260;&#x1D569;</code>. Negative indices select from the end of <code>&#x1D569;</code>, in that <code>&#xAF;1</code> indicates the last major cell and <code>-&#x2260;&#x1D569;</code> indicates the first. If <code>&#x2260;&#x1D569;</code> is 0, then no index is valid.<pre>    &#xAF;2 &#x228F; &quot;abcdef&quot;
+
+    0 &#x228F; &quot;&quot;
+</pre>
+<h3>First Cell</h3>
+The monadic case First Cell (<code>&#x228F;&#x1D569;</code>) is identical to <code>0&#x228F;&#x1D569;</code>. It has the same restrictions: <code>&#x1D569;</code> must have rank 1 or more, and length 1 or more.<pre>    &#x228F; &quot;abc&quot;
+
+    &#x228F; &quot;abc&quot;&#x224D;&quot;def&quot;
+
+    &#x228F; &#x224D; &quot;abc&quot;
+
+    &#x228F; &#039;a&#039;
+</pre>
+<h2>First-axis selection</h2>
+If <code>&#x1D568;</code> is an array of numbers (including any empty array), then each number indicates a major cell of <code>&#x1D569;</code>. In the simplest case, a list of numbers gives a result with the same rank as <code>&#x1D569;</code> but the length of <code>&#x1D568;</code>.<pre>    2&#x203F;3&#x203F;3&#x203F;0&#x203F;4&#x203F;1 &#x228F; &quot;OlZEt&quot;
+
+    &#x27E8;&#x27E9; &#x228F; &quot;OlZEt&quot;
+</pre>To find the first and last cells of <code>&#x1D569;</code>, use <code>0&#x203F;&#xAF;1</code> for the left argument.<pre>    &#x22A2; m &#x2190; 3&#x203F;5&#x203F;7&#x203F;11 |&#x231C; &#xD7;&#x2DC;&#x2195;7
+
+    0&#x203F;&#xAF;1 &#x228F; m
+</pre>More generally, <code>&#x1D568;</code> can be an array of any rank. Each of its 0-cells&#x2014;containing a single number&#x2014;is replaced with a cell of <code>&#x1D569;</code> in the result. The result&#039;s shape is then made up of the shape of <code>&#x1D568;</code> and the major cell shape of <code>&#x1D569;</code>: it&#039;s <code>(&#x2262;&#x1D568;)&#x223E;1&#x2193;&#x2262;&#x1D569;</code>.When <code>&#x1D569;</code> is a list, the result has the same shape as <code>&#x1D568;</code>. Elements of <code>&#x1D568;</code> are replaced one-for-one with elements of <code>&#x1D569;</code>.<pre>    2|m
+
+    (2|m) &#x228F; &quot; *&quot;
+</pre>Another special case is when <code>&#x1D568;</code> is a unit. Now the result shape will be the major cell shape of <code>&#x1D569;</code>. In fact it&#039;s the same as the atom case above, that is, for a number <code>n</code>, <code>(&lt;n)&#x228F;&#x1D569;</code> is the same as <code>n&#x228F;&#x1D569;</code>.The general case can result in a complicated array. Remember that the initial axes come from <code>&#x1D568;</code> while later ones come from <code>&#x1D569;</code>.<pre>    &quot;awA0&quot; +&#x231C; &#x2195;4
+
+    2 &#x2195; &#x2195;4
+
+    (2 &#x2195; &#x2195;4) &#x228F; &quot;awA0&quot; +&#x231C; &#x2195;4
+</pre>
+<h2>Multi-axis selection</h2>
+Select also allows <code>&#x1D568;</code> to apply to multiple axes of <code>&#x1D569;</code> simultaneously. For this case, <code>&#x1D568;</code> must be a non-empty list (or unit array) where every element is an array of indices.<pre>    &#x27E8;2&#x203F;1, 3&#x203F;0&#x203F;0&#x27E9; &#x228F; &#x2195;3&#x203F;4
+</pre>Using a <a href="range.md">range</a> for <code>&#x1D569;</code> shows the structure of the selected elements more clearly, because each element is its own index. Each element of <code>&#x1D568;</code> acts independently, giving a structure like the <a href="map.md#table">Table</a> modifier.While <code>&#x1D568;</code> must have rank one or less, its elements can have any rank. When the elements are units, the corresponding axis of <code>&#x1D569;</code> disappears from the result. We can select a 0-cell of <code>&#x1D569;</code> in this way, although the more common case of selecting an element is handled by <a href="pick.md">Pick</a>.<pre>    &#x27E8;&lt;4,&lt;5,&lt;1&#x27E9; &#x228F; (3&#x294A;10)&#x294A;&#x2195;1e3
+    &#x27E8; 4, 5, 1&#x27E9; &#x2291; (3&#x294A;10)&#x294A;&#x2195;1e3
+</pre>However, the <code>&lt;&#xA8;&#x22B8;&#x228F;</code> construct can select a cell of any rank from <code>&#x1D569;</code>, because <code>&#x2260;&#x1D568;</code> can be smaller than <code>=&#x1D569;</code> (okay, not quite: an empty list is always interpreted as a list of indices, so it&#039;s impossible to select the full-rank cell <code>&#x1D569;</code>). Below, <code>&#x1D568;</code> is missing one axis and the result is a 1-cell, or row, of <code>&#x1D569;</code>.<pre>    &#x27E8;4,5&#x27E9; &lt;&#xA8;&#x22B8;&#x228F; (3&#x294A;10)&#x294A;&#x2195;1e3
+</pre>If an element of <code>&#x1D568;</code> has rank more than 1, it increases the rank of <code>&#x1D569;</code> rather than decreasing it. The general rule is that in the result, one axis of <code>&#x1D569;</code> is replaced by all the axes of the corresponding element of <code>&#x1D568;</code> (trailing axes are unchanged). So the final shape <code>&#x2262;&#x1D568;&#x228F;&#x1D569;</code> is <code>(&#x223E;&#x2262;&#xA8;&#x1D568;)&#x223E;&#x1D568;&#x2260;&#x22B8;&#x2193;&#x2262;&#x1D569;</code>. But this shape doesn&#039;t affect the elements retrieved from <code>&#x1D569;</code>. In all cases, using <code>&#x294A;&#xA8;&#x1D568;</code> for the left argument and then <a href="reshape.md">reshaping</a> the result would yield the same value.Selection only ever applies to leading axes of <code>&#x1D569;</code>. However, you can skip some leading axes using <a href="rank.md">Rank</a> modifiers <code>&#x2D8;</code> or <code>&#x2389;</code>, to select on any contiguous set of axes. In particular, use the one-axis case <code>&#x1D568;&#x22B8;&#x228F;&#x2389;(-k) &#x1D569;</code> to select along axis <code>k</code> of <code>&#x1D569;</code>.
+    </article>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Over</h1>
+Atop and Over are 2-modifiers that extend the idea of &quot;apply this, then that&quot; in two different ways. They&#039;re modelled after the mathematical notation f&#x2218;g to compose two functions, and both do the same thing when there&#039;s one argument: either <code>F&#x2218;G x</code> or <code>F&#x25CB;G x</code> is <code>F G x</code>.<table>
+  <thead>
+    <tr>
+      <th><code>Cmp</code></th>
+      <th><code>Cmp 𝕩</code></th>
+      <th><code>𝕨 Cmp 𝕩</code></th>
+      <th>Unified</th>
+      <th>On list</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>F○G</code></td>
+      <td><code>F G 𝕩</code></td>
+      <td><code>(G 𝕨) F G 𝕩</code></td>
+      <td><code>{(𝔾𝕨)𝔽𝔾𝕩}</code></td>
+      <td><code>F´G¨𝕩</code></td>
+    </tr>
+  </tbody>
+</table>
+When there are two arguments, we might say Atop treats the right operand <code>&#x1D53E;</code> as primary and Over treats <code>&#x1D53D;</code> as primary&#x2014;the primary operand becomes dyadic while the other is always monadic. Atop applies <code>&#x1D53E;</code> directly, making it more like mathematical composition if we suppose that <code>&#x1D53E;</code> is a function that can take a pair of arguments. Over instead makes two calls to apply <code>&#x1D53E;</code> separately to both arguments, then passes the results to <code>&#x1D53D;</code>.Once you get used to Over, it&#039;s painful to go without it. I&#039;d use it all the time in C if I could.Usually Over is used just for the dyadic meaning. If you have a composition that only works with one argument it&#039;s typical to write it with Atop (<code>&#x2218;</code>). And cases that work with one or two arguments do come up from time to time, but they&#039;re fairly rare, so the examples below are just for two arguments.A classic is the function <code>&#x2261;&#x25CB;&#x2227;</code>, which tests whether <code>&#x1D568;</code> is a reordering of <code>&#x1D569;</code>. The idea is to sort both arrays with <code>&#x2227;</code> to remove the ordering information, then see if they match.<pre>    &quot;BQN&quot; &#x2261;&#x25CB;&#x2227; &quot;QNB&quot;
+    &quot;BQN&quot; &#x2261;&#x25CB;&#x2227; &quot;BBQ&quot;
+</pre>Another example is <code>/&#x25CB;&#x294A;</code>, used to filter elements in a high-rank array. Alone, <code>/</code> won&#039;t do this because there&#039;s no automatic choice of ordering for the results. Applying <a href="reshape.md">Deshape</a> (<code>&#x294A;</code>) to both chooses index order.<pre>    &#x22A2; a &#x2190; &quot;qBrs&quot;&#x224D;&quot;QtuN&quot;
+
+    a &lt; &#039;a&#039;  # Capital letters
+
+    (a&lt;&#039;a&#039;) / a  # Not allowed
+
+    (a&lt;&#039;a&#039;) /&#x25CB;&#x294A; a
+</pre>Over is closely connected with the <a href="under.md">Under</a> modifier, which performs all the same steps but then undoes <code>&#x1D53E;</code> afterwards.
+    </article>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="charset" content="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="/bqncards/css/index.css"/>
+  </head>
+  <body>
+    <article class="operator-page">
+    
+<h1>Occurrence Count</h1>
+Occurrence Count (<code>&#x2292;</code>) is a somewhat more sophisticated take on the idea behind Mark Firsts: instead of just testing whether a cell is a duplicate, it returns a number indicating how many previous cells match it. This means that Mark Firsts can be implemented with <code>0=&#x2292;</code>.<pre>    &#x2292;   2&#x203F;7&#x203F;1&#x203F;8&#x203F;1&#x203F;7&#x203F;1&#x203F;8&#x203F;2&#x203F;8&#x203F;4
+
+    &#x224D;&#x27DC;&#x2292; 2&#x203F;7&#x203F;1&#x203F;8&#x203F;1&#x203F;7&#x203F;1&#x203F;8&#x203F;2&#x203F;8&#x203F;4
+
+    0=&#x2292; 2&#x203F;7&#x203F;1&#x203F;8&#x203F;1&#x203F;7&#x203F;1&#x203F;8&#x203F;2&#x203F;8&#x203F;4  # First appearances marked
+</pre>While Occurrence Count maintains more information than Mark Firsts, it&#039;s still not as much as <a href="#classify">Classify</a>. We can swap many digits around while keeping the occurrence counts the same; Classify would detect these changes.<pre>    &#x2292;   7&#x203F;1&#x203F;2&#x203F;8&#x203F;7&#x203F;1&#x203F;1&#x203F;2&#x203F;8&#x203F;8&#x203F;4
+</pre>One easy example with Occurrence count is to take a list that has duplicates and return exactly one copy of each duplicate element. Taking each value where the count is 1 ensures that the result has no duplicates, and that every cell that appears twice or more in the argument is represented in the result, since the second occurrence has count 1. Results are ordered by the position of these second occurrences, so a different method might be needed if the ordering is important.<pre>    (1=&#x2292;)&#x22B8;/ &quot;aaaabcddcc&quot;
+</pre>An interesting combination is Occurrence Count applied to the result of <a href="replicate.md#indices">Indices</a> (<code>/</code>). The result counts up to each number from the argument in turn; in other symbols, it&#039;s <code>&#x223E;&#x2195;&#xA8;</code>. This version is interesting because it doesn&#039;t create any nested arrays, just lists of natural numbers.<pre>    &#x2292; / 2&#x203F;3&#x203F;4
+</pre>A more efficient way when <code>&#x2292;</code> doesn&#039;t have a fast implementation is <code>/(&#xAF;1&#x22B8;&#x2291;&#x2195;&#x22B8;-&#x228F;&#x27DC;&#xBB;)+`</code>, but that&#039;s clearly quite a bit more complicated.
+<h1>Progressive Index of</h1>
+Progressive Index of (<code>&#x2292;</code>), as the name and glyph suggest, is a more sophisticated variant of Index of. Like Index of, it returns either <code>&#x2260;&#x1D568;</code> or an index of a cell from <code>&#x1D568;</code> that matches the given cell of <code>&#x1D569;</code>. Unlike Index of, no index can ever be repeated (but <code>&#x2260;&#x1D568;</code> can). Progressive Index of returns the index of the first <em>unused</em> match, provided there&#039;s still one left.<pre>    &quot;aaa&quot; &#x2292; &quot;aaaaa&quot;
+
+    &quot;aaabb&quot; &#x2292; &quot;ababababab&quot;
+</pre>Above we said that <code>&#x1D569;&#x220A;&#x1D568;</code> is <code>(&#x1D568;&#x2290;&#x1D569;)&lt;&#x2260;&#x1D568;</code>, so that <code>&#x2290;&#x2DC;&lt;&#x2260;&#x2218;&#x22A2;</code> is an implementation of Member of. The corresponding <code>&#x2292;&#x2DC;&lt;&#x2260;&#x2218;&#x22A2;</code> implements <em>progressive</em> member of, that is, membership on <a href="https://en.wikipedia.org/wiki/Multiset">multisets</a>. So if <code>&#x1D569;</code> contains two copies of <code>&#039;a&#039;</code>, only the first two instances of <code>&#039;a&#039;</code> in <code>&#x1D568;</code> are considered to belong to it. And like membership is useful for set intersection and difference, progressive membership gives multiset versions of these.<pre>    &quot;aabbcc&quot; (&#x2290;&#x2DC;&lt;&#x2260;&#x2218;&#x22A2;) &quot;baa&quot;
+
+    &quot;aabbcc&quot; (&#x2292;&#x2DC;&lt;&#x2260;&#x2218;&#x22A2;) &quot;baa&quot;
+
+    &quot;aabbcc&quot; ((&#x2292;&#x2DC;=&#x2260;&#x2218;&#x22A2;)/&#x22A3;) &quot;baa&quot;  # Multiset difference
+</pre>This primitive gives an interesting way to implement the <a href="order.md#ordinals">ordinals</a> pattern that might be easier to understand than the classic <code>&#x234B;&#x234B;</code> (it&#039;s probably a little slower though). The idea is to use the sorted array as the left argument to <code>&#x2292;</code>. Now the index returned for each cell is just where it ended up in that sorted order. If we used ordinary Index of then equal cells would share the smallest index; Progressive Index of means ties are broken in favor of earlier cells.<pre>    &#x234B;&#x2218;&#x234B; &quot;adebcedba&quot;
+
+    &#x2227;&#x22B8;&#x2292; &quot;adebcedba&quot;
+
+    &#x2227;&#x22B8;&#x2290; &quot;adebcedba&quot;  # Ties included
+</pre>Here&#039;s a goofy code golf tip: if the two arguments to Progressive Index of are the same, then every cell will be matched to itself, because all the previous indices are taken but the current one does match. So <code>&#x2292;&#x2DC;</code> is the same as <code>&#x2195;&#x2218;&#x2260;</code>.<pre>    &#x2292;&#x2DC; &quot;anything at all&quot;
+</pre>
+    </article>
+  </body>
+</html>
