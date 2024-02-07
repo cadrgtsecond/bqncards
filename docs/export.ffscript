@@ -1,0 +1,29 @@
+# This FontForge script will extract all fonts in a .ttc to individual .ttf font files
+# To use run: fontforge -script export.ffscript [input\font.ttc] [output\path\]
+
+# Get all fonts in the collection
+fonts = FontsInFile($1);	
+count = SizeOf(fonts);
+
+# Loop each font in the collection
+i = 0;
+while( i < count )
+	# Get the individual font name from the collection
+	font_name = fonts[i];
+	
+	# Generate output font name
+	out_name = $2+font_name+".ttf";
+	
+	# Show the font src/dest in the CLI
+	Print(font_name+" => "+out_name);
+	
+	# Open the collection file and select individual font
+	Open($1+"("+font_name+")");
+	
+	# Write the individual font to the destination path
+	Generate(out_name);
+	
+	# Iterate to next font in the collection
+	i++;
+	
+endloop

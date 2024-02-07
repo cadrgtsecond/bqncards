@@ -45,7 +45,7 @@
      hx-get="{{ cmark:node-url (car (cmark:node-children logo)) }}"
      hx-target="#card-target"
      hx-swap="innerHTML"
-     js-bqn-card>
+     @htmx:after-on-load="if($event.detail.xhr.status == 200) { $refs.card_dialog.showModal() }">
     <code class="symb">{{ cmark:node-literal (car (cmark:node-children (car (cmark:node-children logo)))) }}</code>
     <div class="names">
     {% dolist (name (cmark:node-children names)) %}
@@ -77,11 +77,10 @@
     <meta name="charset" content="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/bqncards/css/index.css"/>
-    <script src="/bqncards/js/index.js" defer></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10" crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body x-data>
     {% loop for (heading list) on (cmark:node-children md)
        when (and (typep heading 'cmark:heading-node)
                  (typep list 'cmark:list-node)
@@ -89,8 +88,9 @@
        do %}
       {{ card-group heading (cmark:node-children list) }}
     {% end %}
-    <dialog id="card-dialog">
-      <span class="close">X</span>
+    <dialog id="card-dialog"
+            x-ref="card_dialog">
+      <button class="close" @click="$refs.card_dialog.close()">X</button>
       <div id="card-target">
       </div>
     </dialog>

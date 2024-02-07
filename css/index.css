@@ -9,25 +9,27 @@
   --foreground: #d6d7d9;
 }
 
+@font-face {
+  font-family: "Iosevka Term Extended";
+  src:
+    url(Iosevka%20Term%20Extended.ttf) format('truetype');
+}
+
 a {
   color: #5592d9;
   text-decoration-color: #508dd978;
 }
 
-is(textarea, pre, code, .primitives tr td:first-child) {
-    color: #969698;
+:is(textarea, pre, code, .primitives tr td:first-child) {
     background-color: var(--dark-background);
+    font-family: "Iosevka Term Extended";
 }
 
-code {
-  font-size: 150%;
-}
 
 :is(textarea, pre, .primitives tr td:first-child) {
     margin-left: 1rem;
     margin-right: 1rem;
     padding: 0.5rem 0rem;
-    font-size: 125%;
 }
 
 body, dialog {
@@ -84,6 +86,5 @@ dialog {
   padding: 0rem 0.5rem;
 
   background-color: var(--light-background);
-  ;; TODO: Use a cool font
   color: color-mix(in lch, var(--light-background), 90% var(--foreground))
 }

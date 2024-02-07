@@ -44,7 +44,7 @@
   (gen-op "pick")
   (gen-op "member")
   (gen-op "match")
-  (gen-op "depth"
+  (gen-op "depth")
   (gen-op "over")
   (gen-op "classify")
   (gen-op "ocur"))
